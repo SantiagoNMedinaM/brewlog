@@ -83,8 +83,14 @@
                 <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
               </svg>
             </button>
-            <div class="navbar-user-avatar dropdown" data-bs-toggle="dropdown" tabindex="0" role="button" aria-label="Menú de usuario">
-              {{ current_user.iniciales }}
+            {# Dropdown del avatar. El contenedor .dropdown envuelve al botón
+               (toggle) y al menú, que deben ser HERMANOS para que Bootstrap
+               lo abra correctamente. #}
+            <div class="dropdown">
+              <button type="button" class="navbar-user-avatar"
+                      data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menú de usuario">
+                {{ current_user.iniciales }}
+              </button>
               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark"
                   style="background-color:var(--raw-espresso-800);border:1px solid rgba(255,255,255,0.08);border-radius:var(--border-radius-md);">
                 <li><span class="dropdown-item-text" style="color:var(--raw-crema-100);font-size:var(--font-size-sm);font-weight:600;">{{ current_user.username }}</span></li>

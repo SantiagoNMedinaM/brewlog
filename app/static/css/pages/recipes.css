@@ -66,6 +66,8 @@
 .navbar-user-avatar {
   width: 34px;
   height: 34px;
+  padding: 0;                 /* reset: los <button> traen padding propio */
+  line-height: 1;
   border-radius: var(--border-radius-full);
   background-color: var(--color-accent-primary);
   border: 2px solid rgba(255,255,255,0.15);
