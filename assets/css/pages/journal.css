@@ -1,0 +1,210 @@
+/* ============================================================
+   BrewLog — journal.css
+   Estilos de la Bitácora de Catas (Tasting Journal):
+   - index.html : lista de catas registradas
+   - create.html: formulario de nueva cata
+   La navbar se reutiliza desde recipes.css.
+   ============================================================ */
+
+.journal-page {
+  min-height: 100vh;
+  background-color: var(--color-bg-primary);
+  padding-bottom: var(--space-10);
+}
+
+/* --- Header de la bitácora --- */
+.journal-header {
+  padding: var(--space-8) 0 var(--space-5);
+  border-bottom: 1px solid var(--color-border-primary);
+  margin-bottom: var(--space-6);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+.journal-header__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-3xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+.journal-header__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+/* --- Lista de catas (cada entrada es una fila-tarjeta) --- */
+.tasting-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.tasting-entry {
+  display: flex;
+  gap: var(--space-5);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-normal) var(--easing-out),
+              box-shadow var(--duration-normal) var(--easing-out);
+  text-decoration: none;
+}
+.tasting-entry:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* En mobile, apilamos verticalmente el contenido de la entrada */
+@media (max-width: 575px) {
+  .tasting-entry { flex-direction: column; gap: var(--space-3); }
+}
+
+/* Bloque del puntaje (círculo grande a la izquierda) */
+.tasting-entry__score {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--border-radius-full);
+  background-color: var(--color-bg-tertiary);
+  border: 2px solid var(--color-accent-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.tasting-entry__score-num {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent-primary);
+  line-height: 1;
+}
+.tasting-entry__score-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-text-tertiary);
+}
+
+/* Bloque central con info del grano */
+.tasting-entry__body { flex: 1; min-width: 0; }
+.tasting-entry__grano {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+.tasting-entry__origen {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-3);
+}
+/* Chips con las notas de cata (aroma, sabor...) */
+.tasting-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.tasting-note-chip {
+  font-size: var(--font-size-xs);
+  padding: 2px var(--space-3);
+  border-radius: var(--border-radius-full);
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-secondary);
+}
+
+/* Fecha de la cata, alineada a la derecha */
+.tasting-entry__date {
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* --- Estado vacío (cuando no hay catas todavía) --- */
+.journal-empty {
+  text-align: center;
+  padding: var(--space-9) var(--space-5);
+  border: 2px dashed var(--color-border-primary);
+  border-radius: var(--border-radius-xl);
+  color: var(--color-text-tertiary);
+}
+.journal-empty svg {
+  width: 56px;
+  height: 56px;
+  color: var(--color-border-primary);
+  margin-bottom: var(--space-4);
+}
+.journal-empty__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+/* =============================================================
+   FORMULARIO DE NUEVA CATA (create.html)
+   ============================================================= */
+
+.tasting-form-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-7);
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
+}
+@media (max-width: 767px) {
+  .tasting-form-card { padding: var(--space-5); }
+}
+
+/* Subtítulos que dividen el formulario en secciones lógicas */
+.form-section-title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-primary);
+  margin: var(--space-6) 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border-secondary);
+}
+.form-section-title:first-of-type { margin-top: 0; }
+
+/* --- Control de puntaje con slider --- */
+.score-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.score-control input[type="range"] {
+  flex: 1;
+  accent-color: var(--color-accent-primary); /* tiñe el slider */
+}
+/* Burbuja que muestra el valor actual del slider */
+.score-bubble {
+  flex-shrink: 0;
+  min-width: 64px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent-primary);
+}
+
+/* --- Toggle "¿Recomendarías?" --- */
+.recommend-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-bg-tertiary);
+}

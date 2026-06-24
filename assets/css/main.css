@@ -1,0 +1,202 @@
+/* ============================================================
+   BrewLog — main.css
+   Importa tokens, resetea conflictos de Bootstrap, define base
+   ============================================================ */
+
+@import url('./tokens.css');
+
+/* --- Reset / Base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Tipografía: headings con Playfair Display --- */
+h1, h2, h3, h4, h5, h6,
+.display-1, .display-2, .display-3, .display-4,
+.display-5, .display-6 {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text-primary);
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-md); }
+
+p {
+  margin-bottom: var(--space-4);
+  color: var(--color-text-secondary);
+}
+
+a {
+  color: var(--color-text-link);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+a:hover { color: var(--color-accent-primary-hover); }
+
+/* --- Contenedor principal (override Bootstrap) --- */
+.container,
+.container-fluid {
+  max-width: var(--max-width-page);
+}
+
+/* --- Botones --- */
+.btn {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--border-radius-md);
+  transition: background-color var(--duration-fast) var(--easing-default),
+              box-shadow var(--duration-fast) var(--easing-default),
+              transform var(--duration-fast) var(--easing-default);
+  letter-spacing: 0.01em;
+}
+
+.btn:focus-visible {
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
+
+.btn-primary {
+  background-color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+  color: var(--color-text-inverse);
+}
+.btn-primary:hover {
+  background-color: var(--color-accent-primary-hover);
+  border-color: var(--color-accent-primary-hover);
+  color: var(--color-text-inverse);
+}
+.btn-primary:active {
+  background-color: var(--color-accent-primary-active);
+  border-color: var(--color-accent-primary-active);
+}
+
+.btn-outline-primary {
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+}
+.btn-outline-primary:hover {
+  background-color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+  color: var(--color-text-inverse);
+}
+
+.btn-full { width: 100%; }
+
+/* --- Formularios (override Bootstrap) --- */
+.form-control,
+.form-select {
+  background-color: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  padding: var(--space-3) var(--space-4);
+  transition: border-color var(--duration-fast) var(--easing-default),
+              box-shadow var(--duration-fast) var(--easing-default);
+}
+.form-control::placeholder { color: var(--color-text-tertiary); }
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border-focus);
+  box-shadow: var(--shadow-focus);
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.form-label {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.form-group { margin-bottom: var(--space-5); }
+
+.invalid-feedback { font-size: var(--font-size-sm); }
+
+/* --- Cards --- */
+.card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-normal) var(--easing-out),
+              box-shadow var(--duration-normal) var(--easing-out);
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* --- Badges de método --- */
+.badge-method {
+  display: inline-block;
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-accent-primary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-full);
+  padding: 2px var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+}
+
+/* --- Divider con texto --- */
+.divider-text {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-sm);
+  margin: var(--space-5) 0;
+}
+.divider-text::before,
+.divider-text::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-border-primary);
+}
+
+/* --- Focus rings globales --- */
+:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* --- Scrollbar (Webkit) --- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-primary); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: var(--border-radius-full);
+}

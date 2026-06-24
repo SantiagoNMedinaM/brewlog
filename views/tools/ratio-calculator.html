@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrewLog — Calculadora de Ratio</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../assets/css/main.css" rel="stylesheet">
+  <link href="../../assets/css/pages/recipes.css" rel="stylesheet">
+  <link href="../../assets/css/pages/tools.css" rel="stylesheet">
+</head>
+<body class="tools-page">
+
+  <!-- =========================================================
+       NAVBAR (reutilizada, "Herramientas" activo)
+       ========================================================= -->
+  <nav class="brewlog-navbar">
+    <div class="container px-4">
+      <div class="d-flex align-items-center justify-content-between">
+
+        <a href="../recipes/feed.html" class="navbar-brand-brewlog">
+          <div class="navbar-brand-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 9h13v7a4 4 0 01-4 4H7a4 4 0 01-4-4V9z"/>
+              <path d="M16 9h2a3 3 0 010 6h-2"/>
+              <path d="M8 3c0 0 0 3 3 3s3-3 3-3"/>
+            </svg>
+          </div>
+          <span class="navbar-brand-text">BrewLog</span>
+        </a>
+
+        <ul class="nav d-none d-md-flex align-items-center gap-1">
+          <li class="nav-item"><a href="../recipes/feed.html" class="brewlog-nav-link">Recetas</a></li>
+          <li class="nav-item"><a href="grind-converter.html" class="brewlog-nav-link active">Herramientas</a></li>
+          <li class="nav-item"><a href="../journal/index.html" class="brewlog-nav-link">Bitácora</a></li>
+        </ul>
+
+        <div class="d-none d-md-flex align-items-center gap-3">
+          <button id="theme-toggle" type="button" aria-label="Cambiar tema"
+                  style="background:none;border:none;cursor:pointer;color:rgba(250,247,242,0.55);padding:var(--space-1);display:flex;align-items:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+            </svg>
+          </button>
+          <div class="navbar-user-avatar dropdown" data-bs-toggle="dropdown" tabindex="0" role="button" aria-label="Menú de usuario">
+            JD
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark"
+                style="background-color:var(--raw-espresso-800);border:1px solid rgba(255,255,255,0.08);border-radius:var(--border-radius-md);">
+              <li><a class="dropdown-item" href="../profile/index.html" style="color:var(--raw-crema-200);font-size:var(--font-size-sm);">Mi perfil</a></li>
+              <li><hr class="dropdown-divider" style="border-color:rgba(255,255,255,0.08);"></li>
+              <li><a class="dropdown-item" href="../auth/login.html" style="color:var(--raw-crema-200);font-size:var(--font-size-sm);">Cerrar sesión</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <button class="navbar-toggler border-0 d-md-none" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mobile-nav"
+                aria-controls="mobile-nav" aria-expanded="false" aria-label="Menú"
+                style="color:rgba(250,247,242,0.65);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="collapse" id="mobile-nav">
+        <ul class="nav flex-column pt-3 pb-2 gap-1">
+          <li><a href="../recipes/feed.html" class="brewlog-nav-link">Recetas</a></li>
+          <li><a href="grind-converter.html" class="brewlog-nav-link">Conversor de Molienda</a></li>
+          <li><a href="ratio-calculator.html" class="brewlog-nav-link active">Calculadora de Ratio</a></li>
+          <li><a href="../journal/index.html" class="brewlog-nav-link">Bitácora</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- =========================================================
+       CONTENIDO PRINCIPAL
+       ========================================================= -->
+  <main class="container px-4">
+
+    <header class="tools-header">
+      <h1 class="tools-header__title">Calculadora de Ratio</h1>
+      <p class="tools-header__subtitle">
+        Calculá la proporción exacta entre café y agua, y controlá el
+        tiempo de extracción con el cronómetro integrado.
+      </p>
+    </header>
+
+    <!-- Tabs secundarios entre herramientas -->
+    <nav class="tools-tabs" aria-label="Herramientas">
+      <a href="grind-converter.html" class="tools-tab">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+        Conversor de Molienda
+      </a>
+      <a href="ratio-calculator.html" class="tools-tab active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+        </svg>
+        Calculadora de Ratio
+      </a>
+    </nav>
+
+    <div class="tool-card">
+      <!-- Dos columnas: calculadora (izq) | cronómetro (der) -->
+      <div class="calc-grid">
+
+        <!-- ============ COLUMNA 1: CALCULADORA DE RATIO ============ -->
+        <div>
+          <h2 style="font-size:var(--font-size-xl);margin-bottom:var(--space-5);">Proporción</h2>
+
+          <!-- Gramos de café -->
+          <div class="form-group">
+            <label class="form-label" for="input-cafe">Café (gramos)</label>
+            <input type="number" id="input-cafe" class="form-control"
+                   value="18" min="0" step="0.5">
+          </div>
+
+          <!-- Ratio: cambiar esto recalcula el agua -->
+          <div class="form-group">
+            <label class="form-label" for="input-ratio">Ratio (1 : X)</label>
+            <input type="number" id="input-ratio" class="form-control"
+                   value="16" min="1" step="0.5">
+          </div>
+
+          <!-- Agua: cambiar esto recalcula el ratio -->
+          <div class="form-group">
+            <label class="form-label" for="input-agua">Agua (gramos / ml)</label>
+            <input type="number" id="input-agua" class="form-control"
+                   value="288" min="0" step="1">
+          </div>
+
+          <!-- Resultado del ratio en grande -->
+          <div class="ratio-display">
+            <div class="ratio-display__label">Tu proporción</div>
+            <div class="ratio-display__value" id="ratio-display-value">1 : 16</div>
+          </div>
+        </div>
+
+        <!-- ============ COLUMNA 2: CRONÓMETRO ============ -->
+        <div>
+          <h2 style="font-size:var(--font-size-xl);margin-bottom:var(--space-5);">Cronómetro</h2>
+
+          <!-- Selector de método: ajusta el tiempo objetivo -->
+          <div class="method-select-row">
+            <label class="form-label mb-0" for="timer-metodo" style="white-space:nowrap;">Método</label>
+            <select id="timer-metodo" class="form-select">
+              <option value="v60">V60 (3:30)</option>
+              <option value="espresso">Espresso (0:28)</option>
+              <option value="chemex">Chemex (4:00)</option>
+              <option value="aeropress">Aeropress (2:00)</option>
+              <option value="prensa">Prensa francesa (4:00)</option>
+            </select>
+          </div>
+
+          <!-- Display + controles del cronómetro -->
+          <div class="timer">
+            <div class="timer__display" id="timer-display">00:00</div>
+            <div class="timer__target" id="timer-target">Objetivo: 03:30</div>
+
+            <div class="timer__controls">
+              <!-- Botón principal play/pausa.
+                   Mostramos un solo ícono a la vez con display:none. -->
+              <button class="timer__btn timer__btn--primary" id="timer-play"
+                      type="button" aria-label="Iniciar o pausar">
+                <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <polygon points="6 4 20 12 6 20 6 4"/>
+                </svg>
+                <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none;">
+                  <rect x="6" y="5" width="4" height="14" rx="1"/>
+                  <rect x="14" y="5" width="4" height="14" rx="1"/>
+                </svg>
+              </button>
+
+              <!-- Botón reset -->
+              <button class="timer__btn" id="timer-reset" type="button" aria-label="Reiniciar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="1 4 1 10 7 10"/>
+                  <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /calc-grid -->
+    </div><!-- /tool-card -->
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/ratio-calculator.js"></script>
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    html.setAttribute('data-theme', localStorage.getItem('brewlog-theme') || 'light');
+    themeToggle?.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('brewlog-theme', next);
+    });
+  </script>
+</body>
+</html>

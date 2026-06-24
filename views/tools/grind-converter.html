@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrewLog — Conversor de Molienda</title>
+
+  <!-- Bootstrap (grilla + dropdown de la navbar) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Sistema base de BrewLog (tokens + estilos globales) -->
+  <link href="../../assets/css/main.css" rel="stylesheet">
+  <!-- Navbar reutilizada desde la hoja de recetas -->
+  <link href="../../assets/css/pages/recipes.css" rel="stylesheet">
+  <!-- Estilos específicos de las herramientas -->
+  <link href="../../assets/css/pages/tools.css" rel="stylesheet">
+</head>
+<body class="tools-page">
+
+  <!-- =========================================================
+       NAVBAR (idéntica a feed.html para mantener consistencia).
+       Marcamos "Herramientas" como activo.
+       ========================================================= -->
+  <nav class="brewlog-navbar">
+    <div class="container px-4">
+      <div class="d-flex align-items-center justify-content-between">
+
+        <a href="../recipes/feed.html" class="navbar-brand-brewlog">
+          <div class="navbar-brand-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 9h13v7a4 4 0 01-4 4H7a4 4 0 01-4-4V9z"/>
+              <path d="M16 9h2a3 3 0 010 6h-2"/>
+              <path d="M8 3c0 0 0 3 3 3s3-3 3-3"/>
+            </svg>
+          </div>
+          <span class="navbar-brand-text">BrewLog</span>
+        </a>
+
+        <ul class="nav d-none d-md-flex align-items-center gap-1">
+          <li class="nav-item"><a href="../recipes/feed.html" class="brewlog-nav-link">Recetas</a></li>
+          <li class="nav-item"><a href="grind-converter.html" class="brewlog-nav-link active">Herramientas</a></li>
+          <li class="nav-item"><a href="../journal/index.html" class="brewlog-nav-link">Bitácora</a></li>
+        </ul>
+
+        <div class="d-none d-md-flex align-items-center gap-3">
+          <!-- Botón de cambio de tema (dark / light) -->
+          <button id="theme-toggle" type="button" aria-label="Cambiar tema"
+                  style="background:none;border:none;cursor:pointer;color:rgba(250,247,242,0.55);padding:var(--space-1);display:flex;align-items:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+            </svg>
+          </button>
+          <div class="navbar-user-avatar dropdown" data-bs-toggle="dropdown" tabindex="0" role="button" aria-label="Menú de usuario">
+            JD
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark"
+                style="background-color:var(--raw-espresso-800);border:1px solid rgba(255,255,255,0.08);border-radius:var(--border-radius-md);">
+              <li><a class="dropdown-item" href="../profile/index.html" style="color:var(--raw-crema-200);font-size:var(--font-size-sm);">Mi perfil</a></li>
+              <li><hr class="dropdown-divider" style="border-color:rgba(255,255,255,0.08);"></li>
+              <li><a class="dropdown-item" href="../auth/login.html" style="color:var(--raw-crema-200);font-size:var(--font-size-sm);">Cerrar sesión</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Botón hamburguesa (mobile) -->
+        <button class="navbar-toggler border-0 d-md-none" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mobile-nav"
+                aria-controls="mobile-nav" aria-expanded="false" aria-label="Menú"
+                style="color:rgba(250,247,242,0.65);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Menú colapsable mobile -->
+      <div class="collapse" id="mobile-nav">
+        <ul class="nav flex-column pt-3 pb-2 gap-1">
+          <li><a href="../recipes/feed.html" class="brewlog-nav-link">Recetas</a></li>
+          <li><a href="grind-converter.html" class="brewlog-nav-link active">Conversor de Molienda</a></li>
+          <li><a href="ratio-calculator.html" class="brewlog-nav-link">Calculadora de Ratio</a></li>
+          <li><a href="../journal/index.html" class="brewlog-nav-link">Bitácora</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- =========================================================
+       CONTENIDO PRINCIPAL
+       ========================================================= -->
+  <main class="container px-4">
+
+    <header class="tools-header">
+      <h1 class="tools-header__title">Conversor de Molienda</h1>
+      <p class="tools-header__subtitle">
+        Convertí el punto de molienda de una receta al de tu propio molino.
+        El cálculo usa el tamaño de partícula en micrones como referencia común.
+      </p>
+    </header>
+
+    <!-- Tabs secundarios: saltar entre las dos herramientas -->
+    <nav class="tools-tabs" aria-label="Herramientas">
+      <a href="grind-converter.html" class="tools-tab active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+        Conversor de Molienda
+      </a>
+      <a href="ratio-calculator.html" class="tools-tab">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+        </svg>
+        Calculadora de Ratio
+      </a>
+    </nav>
+
+    <!-- Tarjeta de la herramienta -->
+    <div class="tool-card">
+
+      <!-- Grilla: molino origen | flecha | molino destino -->
+      <div class="converter-grid">
+
+        <!-- ===== Molino ORIGEN (el de la receta) ===== -->
+        <div>
+          <div class="form-group">
+            <label class="form-label" for="molino-origen">Molino de la receta</label>
+            <!-- Las opciones se cargan dinámicamente desde el JS -->
+            <select id="molino-origen" class="form-select"></select>
+          </div>
+          <div class="form-group mb-0">
+            <label class="form-label" for="punto-origen">Punto de molienda</label>
+            <!-- type=number con step 0.5 para permitir medios puntos -->
+            <input type="number" id="punto-origen" class="form-control"
+                   value="20" min="0" step="0.5" placeholder="Ej: 20">
+          </div>
+        </div>
+
+        <!-- ===== Flecha de conversión ===== -->
+        <div class="converter-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </div>
+
+        <!-- ===== Molino DESTINO (el tuyo) ===== -->
+        <div>
+          <div class="form-group mb-0">
+            <label class="form-label" for="molino-destino">Tu molino</label>
+            <select id="molino-destino" class="form-select"></select>
+          </div>
+        </div>
+
+      </div><!-- /converter-grid -->
+
+      <!-- ===== Resultado (se actualiza en tiempo real) ===== -->
+      <div class="converter-result" id="converter-result">
+        <div class="converter-result__label">Punto equivalente en tu molino</div>
+        <div class="converter-result__value" id="result-value">—</div>
+        <div class="converter-result__micrones" id="result-micrones">
+          Completá los tres campos para ver la equivalencia
+        </div>
+      </div>
+
+      <!-- ===== Tabla de equivalencias de referencia (colapsable) ===== -->
+      <div class="mt-5">
+        <button class="btn btn-outline-primary btn-sm" type="button"
+                data-bs-toggle="collapse" data-bs-target="#tabla-equivalencias"
+                aria-expanded="false" aria-controls="tabla-equivalencias">
+          Ver tabla de equivalencias completa
+        </button>
+        <div class="collapse" id="tabla-equivalencias">
+          <table class="equivalence-table">
+            <thead>
+              <tr>
+                <th>Tamaño / Uso</th>
+                <th>Micrones (µm)</th>
+                <th>Comandante</th>
+                <th>1Zpresso JX</th>
+                <th>Baratza Encore</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Espresso (fino)</td><td>200–300</td><td>8–10</td><td>16–24</td><td>5–8</td></tr>
+              <tr><td>Aeropress</td><td>400–500</td><td>14–17</td><td>32–40</td><td>10–13</td></tr>
+              <tr><td>V60 (medio-fino)</td><td>500–600</td><td>17–20</td><td>40–48</td><td>13–16</td></tr>
+              <tr><td>Chemex (medio)</td><td>600–700</td><td>20–23</td><td>48–56</td><td>16–18</td></tr>
+              <tr><td>Prensa francesa (grueso)</td><td>900–1100</td><td>30–36</td><td>72–88</td><td>24–30</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /tool-card -->
+  </main>
+
+  <!-- Bootstrap JS (dropdown, collapse) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Lógica del conversor -->
+  <script src="../../assets/js/grind-converter.js"></script>
+  <!-- Dark mode: recuerda la preferencia con localStorage -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    html.setAttribute('data-theme', localStorage.getItem('brewlog-theme') || 'light');
+    themeToggle?.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('brewlog-theme', next);
+    });
+  </script>
+</body>
+</html>

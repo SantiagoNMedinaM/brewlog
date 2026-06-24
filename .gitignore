@@ -1,0 +1,29 @@
+# ===== Archivos comprimidos de prácticas (binarios pesados) =====
+*.rar
+*.zip
+
+# ===== Prácticas anteriores de la cursada (no forman parte de BrewLog) =====
+practica_bootstrap_1.html
+practica_bootstrap_2.html
+practica_bootstrap_3.html
+practica_bootstrap_4.html
+practica_bootstrap_final.html
+
+# Imágenes sueltas de prácticas
+whatsapp-image-*.webp
+22-780x780.png
+
+# ===== Tooling del agente / editor (no es parte del proyecto web) =====
+.claude/
+skills-lock.json
+
+# ===== Sistema operativo =====
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# ===== Editores =====
+.vscode/
+.idea/
+*.swp

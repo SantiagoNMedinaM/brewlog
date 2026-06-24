@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrewLog — Iniciar sesión</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../assets/css/main.css" rel="stylesheet">
+  <link href="../../assets/css/pages/auth.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="auth-page">
+
+  <!-- Panel visual (oculto en mobile) -->
+  <div class="auth-hero">
+    <img
+      src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80"
+      alt="Preparación de café de especialidad con método pour-over"
+      loading="lazy"
+    >
+    <div class="auth-hero__overlay">
+      <p class="auth-hero__tagline">Cada taza,<br>una historia.</p>
+      <p class="auth-hero__sub">Café de Especialidad · Comunidad</p>
+    </div>
+  </div>
+
+  <!-- Panel de formulario -->
+  <div class="auth-form-panel">
+
+    <!-- Logo -->
+    <div class="auth-logo">
+      <div class="auth-logo__mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 9h13v7a4 4 0 01-4 4H7a4 4 0 01-4-4V9z" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+          <path d="M16 9h2a3 3 0 010 6h-2" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M8 3c0 0 0 3 3 3s3-3 3-3" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="auth-logo__name">BrewLog</span>
+    </div>
+
+    <h1 class="auth-heading">Bienvenido</h1>
+    <p class="auth-subheading">Ingresá a tu cuenta o creá una nueva.</p>
+
+    <!-- Tabs -->
+    <div class="auth-tabs" role="tablist">
+      <button
+        class="auth-tab active"
+        data-target="form-login"
+        role="tab"
+        aria-selected="true"
+        aria-controls="form-login"
+        id="tab-login"
+      >Iniciar sesión</button>
+      <button
+        class="auth-tab"
+        data-target="form-register"
+        role="tab"
+        aria-selected="false"
+        aria-controls="form-register"
+        id="tab-register"
+      >Registrarse</button>
+    </div>
+
+    <!-- ===== Formulario de Login ===== -->
+    <form
+      id="form-login"
+      class="auth-form active"
+      novalidate
+      role="tabpanel"
+      aria-labelledby="tab-login"
+    >
+
+      <div class="form-group">
+        <label class="form-label" for="login-email">Correo electrónico</label>
+        <input
+          type="email"
+          id="login-email"
+          name="email"
+          class="form-control"
+          placeholder="tu@email.com"
+          required
+          autocomplete="email"
+          aria-describedby="login-email-error"
+        >
+        <div id="login-email-error" class="invalid-feedback">
+          Ingresá un correo electrónico válido.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="login-password">Contraseña</label>
+        <div class="input-password-wrapper">
+          <input
+            type="password"
+            id="login-password"
+            name="password"
+            class="form-control"
+            placeholder="••••••••"
+            required
+            minlength="8"
+            autocomplete="current-password"
+            aria-describedby="login-password-error"
+          >
+          <button
+            type="button"
+            class="btn-toggle-password"
+            aria-label="Mostrar contraseña"
+          >
+            <!-- Ícono ojo (SVG inline) -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <div id="login-password-error" class="invalid-feedback">
+          La contraseña debe tener al menos 8 caracteres.
+        </div>
+      </div>
+
+      <div class="form-options">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="login-remember" name="remember">
+          <label class="form-check-label" for="login-remember">Recordarme</label>
+        </div>
+        <a href="#" class="link-secondary">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full mb-3">
+        Ingresar
+      </button>
+
+      <div class="divider-text">o continuá con</div>
+
+      <button type="button" class="btn-google">
+        <!-- Google icon SVG -->
+        <svg class="btn-google__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Continuar con Google
+      </button>
+
+    </form>
+
+    <!-- ===== Formulario de Registro ===== -->
+    <form
+      id="form-register"
+      class="auth-form"
+      novalidate
+      role="tabpanel"
+      aria-labelledby="tab-register"
+    >
+
+      <div class="form-group">
+        <label class="form-label" for="reg-username">Nombre de usuario</label>
+        <input
+          type="text"
+          id="reg-username"
+          name="username"
+          class="form-control"
+          placeholder="barista_juan"
+          required
+          minlength="3"
+          maxlength="30"
+          pattern="[a-zA-Z0-9_]+"
+          autocomplete="username"
+          aria-describedby="reg-username-error"
+        >
+        <div id="reg-username-error" class="invalid-feedback">
+          Solo letras, números y guiones bajos (3–30 caracteres).
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reg-email">Correo electrónico</label>
+        <input
+          type="email"
+          id="reg-email"
+          name="email"
+          class="form-control"
+          placeholder="tu@email.com"
+          required
+          autocomplete="email"
+          aria-describedby="reg-email-error"
+        >
+        <div id="reg-email-error" class="invalid-feedback">
+          Ingresá un correo electrónico válido.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reg-password">Contraseña</label>
+        <div class="input-password-wrapper">
+          <input
+            type="password"
+            id="reg-password"
+            name="password"
+            class="form-control"
+            placeholder="••••••••"
+            required
+            minlength="8"
+            autocomplete="new-password"
+            aria-describedby="reg-password-error reg-password-hint"
+          >
+          <button type="button" class="btn-toggle-password" aria-label="Mostrar contraseña">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <!-- Barra de fortaleza -->
+        <div class="password-strength-bar" aria-hidden="true">
+          <div class="password-strength-bar__fill"></div>
+        </div>
+        <div id="reg-password-hint" class="form-text mt-1" style="font-size:var(--font-size-xs); color:var(--color-text-tertiary);">
+          Mínimo 8 caracteres. Mejor si incluye mayúsculas, números y símbolos.
+        </div>
+        <div id="reg-password-error" class="invalid-feedback">
+          La contraseña debe tener al menos 8 caracteres.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reg-password-confirm">Confirmar contraseña</label>
+        <div class="input-password-wrapper">
+          <input
+            type="password"
+            id="reg-password-confirm"
+            name="password_confirm"
+            class="form-control"
+            placeholder="••••••••"
+            required
+            autocomplete="new-password"
+            aria-describedby="reg-confirm-error"
+          >
+          <button type="button" class="btn-toggle-password" aria-label="Mostrar contraseña">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <div id="reg-confirm-error" class="invalid-feedback">
+          Las contraseñas no coinciden.
+        </div>
+      </div>
+
+      <div class="form-check form-group">
+        <input class="form-check-input" type="checkbox" id="reg-terms" name="terms" required>
+        <label class="form-check-label" for="reg-terms" style="font-size:var(--font-size-sm); color:var(--color-text-secondary);">
+          Acepto los <a href="#">Términos y condiciones</a> y la <a href="#">Política de privacidad</a>
+        </label>
+        <div class="invalid-feedback">Debés aceptar los términos para continuar.</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full mb-3">
+        Crear cuenta
+      </button>
+
+      <div class="divider-text">o continuá con</div>
+
+      <button type="button" class="btn-google">
+        <svg class="btn-google__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Continuar con Google
+      </button>
+
+    </form>
+
+    <p class="auth-footer">
+      Al continuar aceptás nuestros <a href="#">Términos</a> y <a href="#">Privacidad</a>.
+    </p>
+
+  </div><!-- /auth-form-panel -->
+</div><!-- /auth-page -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../assets/js/auth.js"></script>
+</body>
+</html>

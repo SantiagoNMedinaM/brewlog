@@ -1,0 +1,295 @@
+/* ============================================================
+   BrewLog — tools.css
+   Estilos compartidos por las dos herramientas interactivas:
+   - Conversor de Molienda (grind-converter.html)
+   - Calculadora de Ratio + Cronómetro (ratio-calculator.html)
+
+   La navbar se reutiliza desde recipes.css (mismas clases),
+   así que este archivo solo cubre lo específico de /tools/.
+   ============================================================ */
+
+/* --- Layout general de página de herramienta --- */
+.tools-page {
+  min-height: 100vh;
+  background-color: var(--color-bg-primary);
+  padding-bottom: var(--space-10);
+}
+
+/* Encabezado de la herramienta: título + descripción breve */
+.tools-header {
+  padding: var(--space-8) 0 var(--space-5);
+  border-bottom: 1px solid var(--color-border-primary);
+  margin-bottom: var(--space-6);
+}
+.tools-header__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-3xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+.tools-header__subtitle {
+  font-size: var(--font-size-md);
+  color: var(--color-text-tertiary);
+  max-width: var(--max-width-content);
+  margin: 0;
+}
+
+/* --- Tabs secundarios entre las dos herramientas --- */
+/* Permiten saltar entre Conversor y Calculadora sin volver al menú */
+.tools-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-7);
+}
+.tools-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--easing-default);
+}
+.tools-tab:hover {
+  border-color: var(--color-border-focus);
+  color: var(--color-text-primary);
+}
+/* El tab activo marca en qué herramienta estás parado */
+.tools-tab.active {
+  background-color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+  color: #fff;
+}
+
+/* --- Tarjeta contenedora de la herramienta --- */
+/* Caja central donde vive toda la interacción */
+.tool-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-7);
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  /* En mobile reducimos el padding para aprovechar el ancho */
+  .tool-card { padding: var(--space-5); }
+}
+
+/* =============================================================
+   CONVERSOR DE MOLIENDA
+   ============================================================= */
+
+/* Disposición de los dos molinos (origen / destino) */
+/* En mobile se apilan; en desktop quedan lado a lado con una
+   flecha de conversión en el medio. */
+.converter-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  align-items: end;
+}
+
+@media (min-width: 768px) {
+  /* 3 columnas: molino origen | flecha | molino destino */
+  .converter-grid {
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-5);
+  }
+}
+
+/* Flecha central de conversión */
+.converter-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent-primary);
+  padding-bottom: var(--space-3);
+}
+.converter-arrow svg { width: 28px; height: 28px; }
+
+/* En mobile, la flecha apunta hacia abajo en lugar de a la derecha */
+@media (max-width: 767px) {
+  .converter-arrow { transform: rotate(90deg); padding: var(--space-2) 0; }
+}
+
+/* Caja de resultado: muestra el punto equivalente calculado */
+.converter-result {
+  margin-top: var(--space-7);
+  padding: var(--space-6);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--color-bg-tertiary);
+  border: 1px dashed var(--color-border-primary);
+  text-align: center;
+}
+.converter-result__label {
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-2);
+}
+/* El número grande del resultado, en tipografía display */
+.converter-result__value {
+  font-family: var(--font-display);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent-primary);
+  line-height: 1;
+}
+.converter-result__micrones {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-3);
+}
+
+/* Estado "sin datos suficientes": resultado atenuado */
+.converter-result.is-empty .converter-result__value {
+  color: var(--color-text-tertiary);
+  opacity: 0.5;
+}
+
+/* Tabla de equivalencias completa (colapsable) */
+.equivalence-table {
+  width: 100%;
+  margin-top: var(--space-5);
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+.equivalence-table th,
+.equivalence-table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border-secondary);
+}
+.equivalence-table th {
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-weight-semibold);
+}
+.equivalence-table td { color: var(--color-text-secondary); }
+
+/* =============================================================
+   CALCULADORA DE RATIO + CRONÓMETRO
+   ============================================================= */
+
+/* Dos columnas: inputs de ratio a la izquierda, cronómetro derecha */
+.calc-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-7);
+}
+@media (min-width: 900px) {
+  .calc-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Visualización del ratio resultante (ej: 1 : 16) */
+.ratio-display {
+  margin-top: var(--space-5);
+  padding: var(--space-6);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--color-bg-tertiary);
+  text-align: center;
+}
+.ratio-display__label {
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-2);
+}
+.ratio-display__value {
+  font-family: var(--font-display);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent-primary);
+  line-height: 1;
+}
+
+/* --- Cronómetro --- */
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--color-bg-inverse);
+  height: 100%;
+}
+/* Display del tiempo en formato MM:SS con fuente monoespaciada
+   para que los dígitos no "bailen" al cambiar */
+.timer__display {
+  font-family: var(--font-mono);
+  font-size: 4rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--raw-crema-100);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+/* Cuando se alcanza el tiempo objetivo, el display parpadea en verde */
+.timer__display.is-target-reached {
+  color: var(--color-status-success);
+  animation: pulse 0.6s var(--easing-default) 3;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+.timer__target {
+  font-size: var(--font-size-sm);
+  color: rgba(250, 247, 242, 0.55);
+  margin-top: var(--space-3);
+}
+.timer__controls {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+.timer__btn {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--border-radius-full);
+  border: 2px solid rgba(250, 247, 242, 0.25);
+  background-color: rgba(250, 247, 242, 0.08);
+  color: var(--raw-crema-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-default);
+}
+.timer__btn:hover {
+  background-color: rgba(250, 247, 242, 0.18);
+  border-color: rgba(250, 247, 242, 0.5);
+}
+.timer__btn svg { width: 22px; height: 22px; }
+/* El botón principal (play/pausa) se destaca con el color de acento */
+.timer__btn--primary {
+  background-color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+  width: 64px;
+  height: 64px;
+}
+.timer__btn--primary:hover {
+  background-color: var(--color-accent-primary-hover);
+  border-color: var(--color-accent-primary-hover);
+}
+
+/* Selector de método: ajusta el tiempo objetivo del cronómetro */
+.method-select-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}

@@ -1,0 +1,292 @@
+/* ============================================================
+   BrewLog — auth.css
+   Estilos para login.html y register.html
+   ============================================================ */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  background-color: var(--color-bg-primary);
+}
+
+/* --- Panel de imagen (izquierda, oculto en mobile) --- */
+.auth-hero {
+  display: none;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .auth-hero { display: block; }
+}
+
+.auth-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.auth-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(26, 17, 10, 0.30) 0%,
+    rgba(26, 17, 10, 0.70) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-8);
+}
+
+.auth-hero__tagline {
+  font-family: var(--font-display);
+  font-size: var(--font-size-3xl);
+  font-style: italic;
+  font-weight: 400;
+  color: #fff;
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-tight);
+  margin: 0;
+}
+
+.auth-hero__sub {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: rgba(255,255,255,0.70);
+  margin-top: var(--space-2);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+/* --- Panel de formulario (derecha) --- */
+.auth-form-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .auth-form-panel {
+    width: 480px;
+    flex: none;
+    padding: var(--space-8);
+    border-left: 1px solid var(--color-border-secondary);
+  }
+}
+
+/* --- Logo --- */
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-7);
+}
+
+.auth-logo__mark {
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-accent-primary);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-logo__mark svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.auth-logo__name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* --- Título del panel --- */
+.auth-heading {
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.auth-subheading {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-6);
+}
+
+/* --- Tabs login / registro --- */
+.auth-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--color-border-primary);
+  margin-bottom: var(--space-6);
+}
+
+.auth-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: var(--space-3) 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color var(--duration-fast) var(--easing-default),
+              border-color var(--duration-fast) var(--easing-default);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.auth-tab:hover {
+  color: var(--color-text-secondary);
+}
+
+.auth-tab.active {
+  color: var(--color-accent-primary);
+  border-bottom-color: var(--color-accent-primary);
+}
+
+/* --- Formularios --- */
+.auth-form {
+  display: none;
+  animation: fadeIn var(--duration-normal) var(--easing-out);
+}
+.auth-form.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Input con toggle de contraseña --- */
+.input-password-wrapper {
+  position: relative;
+}
+
+.input-password-wrapper .form-control {
+  padding-right: var(--space-9);
+}
+
+.btn-toggle-password {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: var(--space-1);
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+.btn-toggle-password:hover { color: var(--color-text-secondary); }
+
+/* --- Barra de fortaleza de contraseña --- */
+.password-strength-bar {
+  height: 3px;
+  border-radius: var(--border-radius-full);
+  background-color: var(--color-border-primary);
+  margin-top: var(--space-2);
+  overflow: hidden;
+}
+
+.password-strength-bar__fill {
+  height: 100%;
+  border-radius: var(--border-radius-full);
+  width: 0%;
+  transition: width var(--duration-normal) var(--easing-default),
+              background-color var(--duration-normal) var(--easing-default);
+}
+
+.password-strength-bar__fill[data-strength="1"] {
+  width: 25%;
+  background-color: var(--color-status-error);
+}
+.password-strength-bar__fill[data-strength="2"] {
+  width: 50%;
+  background-color: var(--color-status-warning);
+}
+.password-strength-bar__fill[data-strength="3"] {
+  width: 75%;
+  background-color: var(--color-status-info);
+}
+.password-strength-bar__fill[data-strength="4"] {
+  width: 100%;
+  background-color: var(--color-status-success);
+}
+
+/* --- Form options (remember me + forgot password) --- */
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.form-options .form-check-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.link-secondary {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+}
+.link-secondary:hover { color: var(--color-text-link); }
+
+/* --- Botón de Google --- */
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--easing-default),
+              border-color var(--duration-fast) var(--easing-default);
+}
+.btn-google:hover {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-border-focus);
+  color: var(--color-text-primary);
+}
+
+.btn-google__icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* --- Footer del panel --- */
+.auth-footer {
+  margin-top: var(--space-6);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+}
