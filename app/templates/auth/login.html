@@ -1,0 +1,175 @@
+{#
+  auth/login.html — Pantalla de inicio de sesión y registro.
+
+  Hereda de base.html pero:
+   - Anula el bloque 'navbar' (en login no se muestra la navbar).
+   - Usa su propio layout split-screen.
+
+  La variable 'tab_activo' (que pasa la ruta) decide qué formulario se
+  muestra primero: 'login' o 'register'. Útil para volver al tab correcto
+  cuando hay un error de validación.
+
+  Los formularios envían POST a las rutas de Flask (auth.login / auth.register).
+#}
+{% extends "base.html" %}
+
+{% block title %}BrewLog — Iniciar sesión{% endblock %}
+
+{% block styles %}
+  <link href="{{ url_for('static', filename='css/pages/auth.css') }}" rel="stylesheet">
+{% endblock %}
+
+{# Anulamos la navbar: en la pantalla de auth no va. #}
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+
+  <!-- Panel visual (oculto en mobile) -->
+  <div class="auth-hero">
+    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80"
+         alt="Preparación de café de especialidad" loading="lazy">
+    <div class="auth-hero__overlay">
+      <p class="auth-hero__tagline">Cada taza,<br>una historia.</p>
+      <p class="auth-hero__sub">Café de Especialidad · Comunidad</p>
+    </div>
+  </div>
+
+  <!-- Panel de formulario -->
+  <div class="auth-form-panel">
+
+    <div class="auth-logo">
+      <div class="auth-logo__mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 9h13v7a4 4 0 01-4 4H7a4 4 0 01-4-4V9z" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+          <path d="M16 9h2a3 3 0 010 6h-2" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M8 3c0 0 0 3 3 3s3-3 3-3" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="auth-logo__name">BrewLog</span>
+    </div>
+
+    <h1 class="auth-heading">Bienvenido</h1>
+    <p class="auth-subheading">Ingresá a tu cuenta o creá una nueva.</p>
+
+    {# Tabs. Marcamos como activo el que indique 'tab_activo'. #}
+    <div class="auth-tabs" role="tablist">
+      <button class="auth-tab {{ 'active' if tab_activo != 'register' }}"
+              data-target="form-login" role="tab" id="tab-login">Iniciar sesión</button>
+      <button class="auth-tab {{ 'active' if tab_activo == 'register' }}"
+              data-target="form-register" role="tab" id="tab-register">Registrarse</button>
+    </div>
+
+    {# ===== Formulario de LOGIN (POST a auth.login) ===== #}
+    <form id="form-login" class="auth-form {{ 'active' if tab_activo != 'register' }}"
+          method="POST" action="{{ url_for('auth.login') }}" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="login-email">Correo electrónico</label>
+        <input type="email" id="login-email" name="email" class="form-control"
+               placeholder="tu@email.com" required autocomplete="email">
+        <div class="invalid-feedback">Ingresá un correo electrónico válido.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="login-password">Contraseña</label>
+        <div class="input-password-wrapper">
+          <input type="password" id="login-password" name="password" class="form-control"
+                 placeholder="••••••••" required minlength="8" autocomplete="current-password">
+          <button type="button" class="btn-toggle-password" aria-label="Mostrar contraseña">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <div class="invalid-feedback">La contraseña debe tener al menos 8 caracteres.</div>
+      </div>
+
+      <div class="form-options">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="login-remember" name="remember">
+          <label class="form-check-label" for="login-remember">Recordarme</label>
+        </div>
+        <a href="#" class="link-secondary">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full mb-3">Ingresar</button>
+
+      <p style="font-size:var(--font-size-xs);color:var(--color-text-tertiary);text-align:center;">
+        Cuenta de prueba: <strong>demo@brewlog.com</strong> / <strong>demo1234</strong>
+      </p>
+    </form>
+
+    {# ===== Formulario de REGISTRO (POST a auth.register) ===== #}
+    <form id="form-register" class="auth-form {{ 'active' if tab_activo == 'register' }}"
+          method="POST" action="{{ url_for('auth.register') }}" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="reg-username">Nombre de usuario</label>
+        <input type="text" id="reg-username" name="username" class="form-control"
+               placeholder="barista_juan" required minlength="3" maxlength="30"
+               pattern="[a-zA-Z0-9_]+" autocomplete="username">
+        <div class="invalid-feedback">Solo letras, números y guiones bajos (3–30 caracteres).</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reg-email">Correo electrónico</label>
+        <input type="email" id="reg-email" name="email" class="form-control"
+               placeholder="tu@email.com" required autocomplete="email">
+        <div class="invalid-feedback">Ingresá un correo electrónico válido.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reg-password">Contraseña</label>
+        <div class="input-password-wrapper">
+          <input type="password" id="reg-password" name="password" class="form-control"
+                 placeholder="••••••••" required minlength="8" autocomplete="new-password">
+          <button type="button" class="btn-toggle-password" aria-label="Mostrar contraseña">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <div class="password-strength-bar" aria-hidden="true">
+          <div class="password-strength-bar__fill"></div>
+        </div>
+        <div class="form-text mt-1" style="font-size:var(--font-size-xs);color:var(--color-text-tertiary);">
+          Mínimo 8 caracteres. Mejor si incluye mayúsculas, números y símbolos.
+        </div>
+        <div class="invalid-feedback">La contraseña debe tener al menos 8 caracteres.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reg-password-confirm">Confirmar contraseña</label>
+        <div class="input-password-wrapper">
+          <input type="password" id="reg-password-confirm" name="password_confirm"
+                 class="form-control" placeholder="••••••••" required autocomplete="new-password">
+          <button type="button" class="btn-toggle-password" aria-label="Mostrar contraseña">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+      </div>
+
+      <div class="form-check form-group">
+        <input class="form-check-input" type="checkbox" id="reg-terms" name="terms" required>
+        <label class="form-check-label" for="reg-terms" style="font-size:var(--font-size-sm);color:var(--color-text-secondary);">
+          Acepto los <a href="#">Términos y condiciones</a>
+        </label>
+        <div class="invalid-feedback">Debés aceptar los términos para continuar.</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full mb-3">Crear cuenta</button>
+    </form>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {# auth.js: tabs, toggle de contraseña, validación inline y barra de fortaleza #}
+  <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

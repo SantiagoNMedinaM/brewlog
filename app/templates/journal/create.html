@@ -1,0 +1,143 @@
+{#
+  journal/create.html — Formulario de nueva cata.
+
+  Recibe 'recetas' (las del usuario) para el select de receta vinculada.
+  Hace POST a journal.create, que guarda la cata en la base de datos.
+#}
+{% extends "base.html" %}
+
+{% block title %}BrewLog — Nueva cata{% endblock %}
+{% block body_class %}journal-page{% endblock %}
+
+{% block styles %}
+  <link href="{{ url_for('static', filename='css/pages/journal.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<main class="container px-4">
+
+  <header class="journal-header">
+    <div>
+      <h1 class="journal-header__title">Nueva Cata</h1>
+      <p class="journal-header__subtitle">Registrá tu experiencia con este grano</p>
+    </div>
+    <a href="{{ url_for('journal.index') }}" class="link-secondary">← Volver a la bitácora</a>
+  </header>
+
+  <div class="tasting-form-card">
+    <form method="POST" action="{{ url_for('journal.create') }}" novalidate>
+
+      <h2 class="form-section-title">El grano</h2>
+
+      <div class="row">
+        <div class="col-md-12 form-group">
+          <label class="form-label" for="nombre_grano">Nombre del grano *</label>
+          <input type="text" id="nombre_grano" name="nombre_grano" class="form-control" required
+                 placeholder="Ej: Etiopía Yirgacheffe Natural">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="origen">Origen</label>
+          <input type="text" id="origen" name="origen" class="form-control" placeholder="Ej: Gedeo, Etiopía">
+        </div>
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="tostador">Tostador</label>
+          <input type="text" id="tostador" name="tostador" class="form-control" placeholder="Ej: La Estación">
+        </div>
+      </div>
+
+      <h2 class="form-section-title">La preparación</h2>
+
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="metodo">Método de extracción</label>
+          <select id="metodo" name="metodo" class="form-select">
+            <option value="">Seleccioná un método</option>
+            <option value="v60">V60</option>
+            <option value="espresso">Espresso</option>
+            <option value="chemex">Chemex</option>
+            <option value="aeropress">Aeropress</option>
+            <option value="prensa_francesa">Prensa francesa</option>
+            <option value="cold_brew">Cold Brew</option>
+            <option value="moka">Moka</option>
+          </select>
+        </div>
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="receta_id">Receta usada (opcional)</label>
+          <select id="receta_id" name="receta_id" class="form-select">
+            <option value="">Sin receta vinculada</option>
+            {% for receta in recetas %}
+              <option value="{{ receta.id }}">{{ receta.titulo }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <h2 class="form-section-title">La evaluación</h2>
+
+      <div class="form-group">
+        <label class="form-label" for="puntaje">Puntaje (1–100)</label>
+        <div class="score-control">
+          <input type="range" id="puntaje" name="puntaje" min="1" max="100" value="85">
+          <span class="score-bubble" id="score-bubble">85</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="notas_aroma">Aroma</label>
+          <textarea id="notas_aroma" name="notas_aroma" class="form-control" rows="2"
+                    placeholder="Ej: floral, frutos rojos, cítrico"></textarea>
+        </div>
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="notas_sabor">Sabor</label>
+          <textarea id="notas_sabor" name="notas_sabor" class="form-control" rows="2"
+                    placeholder="Ej: arándano, caramelo, chocolate"></textarea>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="notas_textura">Cuerpo / Textura</label>
+          <textarea id="notas_textura" name="notas_textura" class="form-control" rows="2"
+                    placeholder="Ej: sedoso, jugoso, achocolatado"></textarea>
+        </div>
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="retrogusto">Retrogusto</label>
+          <textarea id="retrogusto" name="retrogusto" class="form-control" rows="2"
+                    placeholder="Ej: persistente, limpio, dulce"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="recommend-toggle">
+          <div class="form-check form-switch mb-0">
+            <input class="form-check-input" type="checkbox" id="recomendaria" name="recomendaria" checked>
+          </div>
+          <label class="form-check-label mb-0" for="recomendaria"
+                 style="color:var(--color-text-secondary);font-size:var(--font-size-sm);">
+            Recomendaría este grano a la comunidad
+          </label>
+        </div>
+      </div>
+
+      <div class="d-flex gap-3 mt-5">
+        <button type="submit" class="btn btn-primary">Guardar cata</button>
+        <a href="{{ url_for('journal.index') }}" class="btn btn-outline-primary">Cancelar</a>
+      </div>
+
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  {# El slider de puntaje refleja su valor en la burbuja al lado #}
+  const slider = document.getElementById('puntaje');
+  const bubble = document.getElementById('score-bubble');
+  slider.addEventListener('input', () => { bubble.textContent = slider.value; });
+</script>
+{% endblock %}

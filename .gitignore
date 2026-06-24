@@ -27,3 +27,18 @@ Desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# ===== Python / Flask =====
+# (los comentarios van en su propia línea; un # al final de un patrón NO es comentario)
+
+# Entorno virtual (se recrea con requirements.txt)
+venv/
+# Bytecode compilado de Python
+__pycache__/
+*.pyc
+*.pyo
+# Base de datos SQLite local (se recrea con 'flask --app app init-db')
+brewlog.db
+instance/
+# Variables de entorno secretas
+.env

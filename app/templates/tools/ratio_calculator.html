@@ -1,0 +1,103 @@
+{#
+  tools/ratio_calculator.html — Calculadora de ratio + cronómetro.
+  La lógica está en static/js/ratio-calculator.js (corre en el navegador).
+#}
+{% extends "base.html" %}
+
+{% block title %}BrewLog — Calculadora de Ratio{% endblock %}
+{% block body_class %}tools-page{% endblock %}
+
+{% block styles %}
+  <link href="{{ url_for('static', filename='css/pages/tools.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<main class="container px-4">
+
+  <header class="tools-header">
+    <h1 class="tools-header__title">Calculadora de Ratio</h1>
+    <p class="tools-header__subtitle">
+      Calculá la proporción exacta entre café y agua, y controlá el tiempo de
+      extracción con el cronómetro integrado.
+    </p>
+  </header>
+
+  <nav class="tools-tabs" aria-label="Herramientas">
+    <a href="{{ url_for('tools.grind_converter') }}" class="tools-tab">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      Conversor de Molienda
+    </a>
+    <a href="{{ url_for('tools.ratio_calculator') }}" class="tools-tab active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      Calculadora de Ratio
+    </a>
+  </nav>
+
+  <div class="tool-card">
+    <div class="calc-grid">
+
+      <!-- Calculadora de ratio -->
+      <div>
+        <h2 style="font-size:var(--font-size-xl);margin-bottom:var(--space-5);">Proporción</h2>
+        <div class="form-group">
+          <label class="form-label" for="input-cafe">Café (gramos)</label>
+          <input type="number" id="input-cafe" class="form-control" value="18" min="0" step="0.5">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="input-ratio">Ratio (1 : X)</label>
+          <input type="number" id="input-ratio" class="form-control" value="16" min="1" step="0.5">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="input-agua">Agua (gramos / ml)</label>
+          <input type="number" id="input-agua" class="form-control" value="288" min="0" step="1">
+        </div>
+        <div class="ratio-display">
+          <div class="ratio-display__label">Tu proporción</div>
+          <div class="ratio-display__value" id="ratio-display-value">1 : 16</div>
+        </div>
+      </div>
+
+      <!-- Cronómetro -->
+      <div>
+        <h2 style="font-size:var(--font-size-xl);margin-bottom:var(--space-5);">Cronómetro</h2>
+        <div class="method-select-row">
+          <label class="form-label mb-0" for="timer-metodo" style="white-space:nowrap;">Método</label>
+          <select id="timer-metodo" class="form-select">
+            <option value="v60">V60 (3:30)</option>
+            <option value="espresso">Espresso (0:28)</option>
+            <option value="chemex">Chemex (4:00)</option>
+            <option value="aeropress">Aeropress (2:00)</option>
+            <option value="prensa">Prensa francesa (4:00)</option>
+          </select>
+        </div>
+
+        <div class="timer">
+          <div class="timer__display" id="timer-display">00:00</div>
+          <div class="timer__target" id="timer-target">Objetivo: 03:30</div>
+          <div class="timer__controls">
+            <button class="timer__btn timer__btn--primary" id="timer-play" type="button" aria-label="Iniciar o pausar">
+              <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+              <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none;">
+                <rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>
+              </svg>
+            </button>
+            <button class="timer__btn" id="timer-reset" type="button" aria-label="Reiniciar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/ratio-calculator.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,101 @@
+{#
+  tools/grind_converter.html — Conversor de molienda.
+  La lógica está en static/js/grind-converter.js (corre en el navegador).
+#}
+{% extends "base.html" %}
+
+{% block title %}BrewLog — Conversor de Molienda{% endblock %}
+{% block body_class %}tools-page{% endblock %}
+
+{% block styles %}
+  <link href="{{ url_for('static', filename='css/pages/tools.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<main class="container px-4">
+
+  <header class="tools-header">
+    <h1 class="tools-header__title">Conversor de Molienda</h1>
+    <p class="tools-header__subtitle">
+      Convertí el punto de molienda de una receta al de tu propio molino.
+      El cálculo usa el tamaño de partícula en micrones como referencia común.
+    </p>
+  </header>
+
+  <nav class="tools-tabs" aria-label="Herramientas">
+    <a href="{{ url_for('tools.grind_converter') }}" class="tools-tab active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      Conversor de Molienda
+    </a>
+    <a href="{{ url_for('tools.ratio_calculator') }}" class="tools-tab">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      Calculadora de Ratio
+    </a>
+  </nav>
+
+  <div class="tool-card">
+    <div class="converter-grid">
+      <div>
+        <div class="form-group">
+          <label class="form-label" for="molino-origen">Molino de la receta</label>
+          <select id="molino-origen" class="form-select"></select>
+        </div>
+        <div class="form-group mb-0">
+          <label class="form-label" for="punto-origen">Punto de molienda</label>
+          <input type="number" id="punto-origen" class="form-control" value="20" min="0" step="0.5" placeholder="Ej: 20">
+        </div>
+      </div>
+
+      <div class="converter-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </div>
+
+      <div>
+        <div class="form-group mb-0">
+          <label class="form-label" for="molino-destino">Tu molino</label>
+          <select id="molino-destino" class="form-select"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="converter-result" id="converter-result">
+      <div class="converter-result__label">Punto equivalente en tu molino</div>
+      <div class="converter-result__value" id="result-value">—</div>
+      <div class="converter-result__micrones" id="result-micrones">
+        Completá los tres campos para ver la equivalencia
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <button class="btn btn-outline-primary btn-sm" type="button"
+              data-bs-toggle="collapse" data-bs-target="#tabla-equivalencias"
+              aria-expanded="false" aria-controls="tabla-equivalencias">
+        Ver tabla de equivalencias completa
+      </button>
+      <div class="collapse" id="tabla-equivalencias">
+        <table class="equivalence-table">
+          <thead>
+            <tr><th>Tamaño / Uso</th><th>Micrones (µm)</th><th>Comandante</th><th>1Zpresso JX</th><th>Baratza Encore</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Espresso (fino)</td><td>200–300</td><td>8–10</td><td>16–24</td><td>5–8</td></tr>
+            <tr><td>Aeropress</td><td>400–500</td><td>14–17</td><td>32–40</td><td>10–13</td></tr>
+            <tr><td>V60 (medio-fino)</td><td>500–600</td><td>17–20</td><td>40–48</td><td>13–16</td></tr>
+            <tr><td>Chemex (medio)</td><td>600–700</td><td>20–23</td><td>48–56</td><td>16–18</td></tr>
+            <tr><td>Prensa francesa (grueso)</td><td>900–1100</td><td>30–36</td><td>72–88</td><td>24–30</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/grind-converter.js') }}"></script>
+{% endblock %}

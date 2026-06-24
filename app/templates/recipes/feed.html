@@ -1,0 +1,96 @@
+{#
+  recipes/feed.html — Feed de recetas.
+
+  Recibe 'recetas' (lista de objetos Receta desde la BD) y 'metodo_activo'.
+  Recorremos la lista con un {% for %} y generamos una card por cada receta,
+  en lugar de tenerlas escritas a mano como en la maqueta estática.
+#}
+{% extends "base.html" %}
+
+{% block title %}BrewLog — Recetas{% endblock %}
+{% block body_class %}recipes-page{% endblock %}
+
+{% block styles %}
+  {# journal.css aporta los estilos del estado vacío (.journal-empty) #}
+  <link href="{{ url_for('static', filename='css/pages/journal.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<main class="container px-4">
+
+  <header class="recipes-header d-flex align-items-end justify-content-between flex-wrap gap-3">
+    <div>
+      <h1 class="recipes-header__title">Recetas</h1>
+      <p class="recipes-header__subtitle">{{ recetas|length }} receta{{ 's' if recetas|length != 1 }} en la comunidad</p>
+    </div>
+    <a href="{{ url_for('recipes.create') }}" class="btn-new-recipe">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Nueva receta
+    </a>
+  </header>
+
+  {# Filtros de método: cada uno es un link que recarga el feed con ?metodo=... #}
+  {# El servidor (ruta feed) hace el filtrado real en la base de datos. #}
+  <div class="method-filters" role="group" aria-label="Filtrar por método">
+    {% set metodos = [('all','Todos'), ('v60','V60'), ('espresso','Espresso'),
+                      ('chemex','Chemex'), ('aeropress','Aeropress'),
+                      ('prensa_francesa','Prensa francesa'), ('cold_brew','Cold Brew'),
+                      ('moka','Moka')] %}
+    {% for valor, etiqueta in metodos %}
+      <a href="{{ url_for('recipes.feed', metodo=valor) }}"
+         class="method-pill {{ 'active' if metodo_activo == valor }}">{{ etiqueta }}</a>
+    {% endfor %}
+  </div>
+
+  {# Si hay recetas, las mostramos en grilla; si no, un estado vacío. #}
+  {% if recetas %}
+  <div class="recipes-grid">
+    {% for receta in recetas %}
+      <a href="{{ url_for('recipes.detail', receta_id=receta.id) }}" class="recipe-card">
+        <div class="recipe-card__img-wrapper">
+          <img class="recipe-card__img" src="{{ receta.imagen_url }}"
+               alt="{{ receta.titulo }}" loading="lazy">
+          <span class="recipe-card__badge">{{ receta.metodo|replace('_', ' ') }}</span>
+        </div>
+        <div class="recipe-card__body">
+          <h2 class="recipe-card__title">{{ receta.titulo }}</h2>
+          <div class="recipe-card__meta">
+            <div class="recipe-meta-item">
+              <span class="recipe-meta-item__label">Dosis</span>
+              <span class="recipe-meta-item__value">{{ receta.dosis_cafe|round|int if receta.dosis_cafe else '—' }} g</span>
+            </div>
+            <div class="recipe-meta-item">
+              <span class="recipe-meta-item__label">Ratio</span>
+              <span class="recipe-meta-item__value">{{ receta.ratio or '—' }}</span>
+            </div>
+            <div class="recipe-meta-item">
+              <span class="recipe-meta-item__label">Temp.</span>
+              <span class="recipe-meta-item__value">{{ receta.temp_agua|round|int if receta.temp_agua else '—' }} °C</span>
+            </div>
+            <div class="recipe-meta-item">
+              <span class="recipe-meta-item__label">Tiempo</span>
+              <span class="recipe-meta-item__value">{{ receta.tiempo_extraccion or '—' }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="recipe-card__footer">
+          <div class="recipe-card__author">
+            <div class="recipe-card__avatar">{{ receta.autor.iniciales }}</div>
+            <span class="recipe-card__author-name">{{ receta.autor.username }}</span>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="journal-empty" style="margin-top:var(--space-6);">
+    <p class="journal-empty__title">No hay recetas todavía</p>
+    <p>Sé el primero en compartir una. Hacé clic en "Nueva receta".</p>
+  </div>
+  {% endif %}
+
+</main>
+{% endblock %}

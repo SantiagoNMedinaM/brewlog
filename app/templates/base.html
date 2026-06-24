@@ -1,0 +1,167 @@
+{#
+  base.html — Plantilla base de la que heredan todas las páginas.
+
+  En Jinja2, las demás plantillas usan {% extends "base.html" %} y rellenan
+  los "bloques" ({% block %}) definidos acá. Así la navbar, el <head> y los
+  scripts comunes se escriben UNA sola vez y se reutilizan en todo el sitio.
+
+  Bloques disponibles:
+    - title    : título de la pestaña del navegador
+    - styles   : CSS extra de la página
+    - body_class: clases del <body>
+    - navbar   : por defecto muestra la navbar (se puede sobreescribir vacío)
+    - content  : el contenido principal de la página
+    - scripts  : JS extra de la página
+#}
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}BrewLog{% endblock %}</title>
+
+  <!-- Bootstrap (grilla + componentes como dropdown/collapse) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Sistema de estilos de BrewLog. url_for genera la ruta correcta a /static -->
+  <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/pages/recipes.css') }}" rel="stylesheet">
+  {% block styles %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  {# ===== NAVBAR (solo si hay un usuario logueado) ===== #}
+  {% block navbar %}
+    {% if current_user.is_authenticated %}
+    <nav class="brewlog-navbar">
+      <div class="container px-4">
+        <div class="d-flex align-items-center justify-content-between">
+
+          <a href="{{ url_for('recipes.feed') }}" class="navbar-brand-brewlog">
+            <div class="navbar-brand-mark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 9h13v7a4 4 0 01-4 4H7a4 4 0 01-4-4V9z"/>
+                <path d="M16 9h2a3 3 0 010 6h-2"/>
+                <path d="M8 3c0 0 0 3 3 3s3-3 3-3"/>
+              </svg>
+            </div>
+            <span class="navbar-brand-text">BrewLog</span>
+          </a>
+
+          {# request.blueprint nos dice en qué sección estamos, para marcar el link activo #}
+          <ul class="nav d-none d-md-flex align-items-center gap-1">
+            <li class="nav-item">
+              <a href="{{ url_for('recipes.feed') }}"
+                 class="brewlog-nav-link {{ 'active' if request.blueprint == 'recipes' }}">Recetas</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a href="#" class="brewlog-nav-link dropdown-toggle {{ 'active' if request.blueprint == 'tools' }}"
+                 data-bs-toggle="dropdown" aria-expanded="false">Herramientas</a>
+              <ul class="dropdown-menu dropdown-menu-dark"
+                  style="background-color:var(--raw-espresso-800);border:1px solid rgba(255,255,255,0.08);border-radius:var(--border-radius-md);">
+                <li><a class="dropdown-item" href="{{ url_for('tools.grind_converter') }}"
+                       style="color:var(--raw-crema-200);font-size:var(--font-size-sm);">Conversor de Molienda</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('tools.ratio_calculator') }}"
+                       style="color:var(--raw-crema-200);font-size:var(--font-size-sm);">Calculadora de Ratio</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="{{ url_for('journal.index') }}"
+                 class="brewlog-nav-link {{ 'active' if request.blueprint == 'journal' }}">Bitácora</a>
+            </li>
+          </ul>
+
+          <div class="d-none d-md-flex align-items-center gap-3">
+            <a href="{{ url_for('recipes.create') }}" class="btn-new-recipe"
+               style="font-size:var(--font-size-xs);padding:var(--space-2) var(--space-4);">
+              + Nueva receta
+            </a>
+            <button id="theme-toggle" type="button" aria-label="Cambiar tema"
+                    style="background:none;border:none;cursor:pointer;color:rgba(250,247,242,0.55);padding:var(--space-1);display:flex;align-items:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+              </svg>
+            </button>
+            <div class="navbar-user-avatar dropdown" data-bs-toggle="dropdown" tabindex="0" role="button" aria-label="Menú de usuario">
+              {{ current_user.iniciales }}
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark"
+                  style="background-color:var(--raw-espresso-800);border:1px solid rgba(255,255,255,0.08);border-radius:var(--border-radius-md);">
+                <li><span class="dropdown-item-text" style="color:var(--raw-crema-100);font-size:var(--font-size-sm);font-weight:600;">{{ current_user.username }}</span></li>
+                <li><hr class="dropdown-divider" style="border-color:rgba(255,255,255,0.08);"></li>
+                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"
+                       style="color:var(--raw-crema-200);font-size:var(--font-size-sm);">Cerrar sesión</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <button class="navbar-toggler border-0 d-md-none" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#mobile-nav"
+                  aria-controls="mobile-nav" aria-expanded="false" aria-label="Menú"
+                  style="color:rgba(250,247,242,0.65);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="collapse" id="mobile-nav">
+          <ul class="nav flex-column pt-3 pb-2 gap-1">
+            <li><a href="{{ url_for('recipes.feed') }}" class="brewlog-nav-link">Recetas</a></li>
+            <li><a href="{{ url_for('tools.grind_converter') }}" class="brewlog-nav-link">Conversor de Molienda</a></li>
+            <li><a href="{{ url_for('tools.ratio_calculator') }}" class="brewlog-nav-link">Calculadora de Ratio</a></li>
+            <li><a href="{{ url_for('journal.index') }}" class="brewlog-nav-link">Bitácora</a></li>
+            <li class="mt-2"><a href="{{ url_for('recipes.create') }}" class="btn-new-recipe d-block text-center">+ Nueva receta</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    {% endif %}
+  {% endblock %}
+
+  {# ===== MENSAJES FLASH (avisos de éxito/error desde las rutas) ===== #}
+  {# get_flashed_messages recupera los mensajes que las rutas dejaron con flash() #}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for categoria, mensaje in messages %}
+          {# Traducimos nuestras categorías a las clases de alerta de Bootstrap #}
+          {% set clase = 'success' if categoria == 'success'
+                         else 'danger' if categoria == 'error'
+                         else 'warning' if categoria == 'warning'
+                         else 'info' %}
+          <div class="alert alert-{{ clase }} alert-dismissible fade show" role="alert">
+            {{ mensaje }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {# ===== CONTENIDO PRINCIPAL DE CADA PÁGINA ===== #}
+  {% block content %}{% endblock %}
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Dark mode: recuerda la preferencia entre páginas con localStorage -->
+  <script>
+    (function () {
+      const html = document.documentElement;
+      html.setAttribute('data-theme', localStorage.getItem('brewlog-theme') || 'light');
+      const toggle = document.getElementById('theme-toggle');
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          html.setAttribute('data-theme', next);
+          localStorage.setItem('brewlog-theme', next);
+        });
+      }
+    })();
+  </script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

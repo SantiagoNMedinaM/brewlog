@@ -1,0 +1,90 @@
+{#
+  recipes/detail.html — Detalle de una receta.
+
+  Recibe 'receta' (un objeto Receta). Mostramos sus parámetros técnicos y,
+  si tiene molino/equipo asociados, también esos datos (vía las relaciones
+  receta.molino y receta.equipamiento definidas en models.py).
+#}
+{% extends "base.html" %}
+
+{% block title %}BrewLog — {{ receta.titulo }}{% endblock %}
+{% block body_class %}{% endblock %}
+
+{% block content %}
+<header class="recipe-hero">
+  <img class="recipe-hero__img" src="{{ receta.imagen_url }}" alt="{{ receta.titulo }}">
+  <div class="recipe-hero__overlay">
+    <div class="recipe-hero__content">
+      <span class="badge-method" style="background-color:rgba(250,247,242,0.9);">{{ receta.metodo|replace('_',' ') }}</span>
+      <h1 class="recipe-hero__title">{{ receta.titulo }}</h1>
+    </div>
+  </div>
+</header>
+
+<main class="container px-4">
+
+  <div class="recipe-author-row">
+    <div class="recipe-author-row__avatar">{{ receta.autor.iniciales }}</div>
+    <div>
+      <div style="font-weight:var(--font-weight-semibold);color:var(--color-text-primary);">{{ receta.autor.username }}</div>
+      <div style="font-size:var(--font-size-sm);color:var(--color-text-tertiary);">
+        Publicada el {{ receta.fecha_creacion.strftime('%d/%m/%Y') }}
+      </div>
+    </div>
+  </div>
+
+  {# Parámetros técnicos principales #}
+  <section class="recipe-params" aria-label="Parámetros de la receta">
+    <div class="recipe-param">
+      <div class="recipe-param__value">{{ receta.dosis_cafe|round|int if receta.dosis_cafe else '—' }} g</div>
+      <div class="recipe-param__label">Dosis de café</div>
+    </div>
+    <div class="recipe-param">
+      <div class="recipe-param__value">{{ receta.ratio or '—' }}</div>
+      <div class="recipe-param__label">Ratio</div>
+    </div>
+    <div class="recipe-param">
+      <div class="recipe-param__value">{{ receta.temp_agua|round|int if receta.temp_agua else '—' }} °C</div>
+      <div class="recipe-param__label">Temperatura</div>
+    </div>
+    <div class="recipe-param">
+      <div class="recipe-param__value">{{ receta.tiempo_extraccion or '—' }}</div>
+      <div class="recipe-param__label">Tiempo total</div>
+    </div>
+  </section>
+
+  {# Datos secundarios: agua, molino, molienda, equipo #}
+  <section class="recipe-params" aria-label="Equipamiento">
+    <div class="recipe-param">
+      <div class="recipe-param__value" style="font-size:var(--font-size-md);">{{ receta.volumen_agua|round|int if receta.volumen_agua else '—' }} g</div>
+      <div class="recipe-param__label">Agua</div>
+    </div>
+    <div class="recipe-param">
+      <div class="recipe-param__value" style="font-size:var(--font-size-md);">{{ receta.molino.nombre_completo if receta.molino else '—' }}</div>
+      <div class="recipe-param__label">Molino{{ ' · punto ' ~ receta.punto_molienda if receta.punto_molienda }}</div>
+    </div>
+    <div class="recipe-param">
+      <div class="recipe-param__value" style="font-size:var(--font-size-md);">{{ receta.equipamiento.nombre if receta.equipamiento else '—' }}</div>
+      <div class="recipe-param__label">Equipamiento</div>
+    </div>
+    <div class="recipe-param">
+      <div class="recipe-param__value" style="font-size:var(--font-size-md);">{{ receta.metodo|replace('_',' ')|title }}</div>
+      <div class="recipe-param__label">Método</div>
+    </div>
+  </section>
+
+  {# Cuerpo narrativo #}
+  <article class="recipe-body">
+    {% if receta.descripcion %}
+      <p style="font-size:var(--font-size-lg);color:var(--color-text-primary);">{{ receta.descripcion }}</p>
+    {% endif %}
+
+    <div class="recipe-actions">
+      <a href="{{ url_for('journal.create') }}" class="btn btn-primary">Guardar en mi bitácora</a>
+      <a href="{{ url_for('tools.grind_converter') }}" class="btn btn-outline-primary">Convertir molienda a mi molino</a>
+      <a href="{{ url_for('recipes.feed') }}" class="btn btn-outline-primary">← Volver al feed</a>
+    </div>
+  </article>
+
+</main>
+{% endblock %}

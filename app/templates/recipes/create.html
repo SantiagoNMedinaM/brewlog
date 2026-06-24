@@ -1,0 +1,131 @@
+{#
+  recipes/create.html — Formulario para publicar una receta nueva.
+
+  Recibe 'molinos' y 'equipos' para poblar los <select>. El formulario hace
+  POST a recipes.create, que guarda la receta en la base de datos asociada
+  al usuario logueado.
+#}
+{% extends "base.html" %}
+
+{% block title %}BrewLog — Nueva receta{% endblock %}
+{% block body_class %}journal-page{% endblock %}
+
+{% block styles %}
+  <link href="{{ url_for('static', filename='css/pages/journal.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<main class="container px-4">
+
+  <header class="journal-header">
+    <div>
+      <h1 class="journal-header__title">Nueva receta</h1>
+      <p class="journal-header__subtitle">Compartí tu preparación con la comunidad</p>
+    </div>
+    <a href="{{ url_for('recipes.feed') }}" class="link-secondary">← Volver al feed</a>
+  </header>
+
+  <div class="tasting-form-card">
+    <form method="POST" action="{{ url_for('recipes.create') }}" novalidate>
+
+      <h2 class="form-section-title">Lo básico</h2>
+
+      <div class="row">
+        <div class="col-md-12 form-group">
+          <label class="form-label" for="titulo">Título de la receta *</label>
+          <input type="text" id="titulo" name="titulo" class="form-control" required
+                 placeholder="Ej: Etiopía Yirgacheffe en V60 — Floral">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="metodo">Método de extracción *</label>
+          <select id="metodo" name="metodo" class="form-select" required>
+            <option value="">Seleccioná un método</option>
+            <option value="v60">V60</option>
+            <option value="espresso">Espresso</option>
+            <option value="chemex">Chemex</option>
+            <option value="aeropress">Aeropress</option>
+            <option value="prensa_francesa">Prensa francesa</option>
+            <option value="cold_brew">Cold Brew</option>
+            <option value="moka">Moka</option>
+          </select>
+        </div>
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="imagen_url">URL de imagen (opcional)</label>
+          <input type="url" id="imagen_url" name="imagen_url" class="form-control"
+                 placeholder="https://...">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion" class="form-control" rows="3"
+                  placeholder="Contá el perfil de taza, el origen, qué buscás resaltar..."></textarea>
+      </div>
+
+      <h2 class="form-section-title">Parámetros de extracción</h2>
+
+      <div class="row">
+        <div class="col-md-3 form-group">
+          <label class="form-label" for="dosis_cafe">Café (g)</label>
+          <input type="number" id="dosis_cafe" name="dosis_cafe" class="form-control" step="0.5" placeholder="18">
+        </div>
+        <div class="col-md-3 form-group">
+          <label class="form-label" for="volumen_agua">Agua (g)</label>
+          <input type="number" id="volumen_agua" name="volumen_agua" class="form-control" step="1" placeholder="288">
+        </div>
+        <div class="col-md-3 form-group">
+          <label class="form-label" for="ratio">Ratio</label>
+          <input type="text" id="ratio" name="ratio" class="form-control" placeholder="1:16">
+        </div>
+        <div class="col-md-3 form-group">
+          <label class="form-label" for="temp_agua">Temp. (°C)</label>
+          <input type="number" id="temp_agua" name="temp_agua" class="form-control" step="1" placeholder="92">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 form-group">
+          <label class="form-label" for="tiempo_extraccion">Tiempo (MM:SS)</label>
+          <input type="text" id="tiempo_extraccion" name="tiempo_extraccion" class="form-control" placeholder="3:30">
+        </div>
+        <div class="col-md-4 form-group">
+          <label class="form-label" for="punto_molienda">Punto de molienda</label>
+          <input type="number" id="punto_molienda" name="punto_molienda" class="form-control" step="1" placeholder="20">
+        </div>
+      </div>
+
+      <h2 class="form-section-title">Equipamiento</h2>
+
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="molino_id">Molino</label>
+          <select id="molino_id" name="molino_id" class="form-select">
+            <option value="">Sin especificar</option>
+            {% for molino in molinos %}
+              <option value="{{ molino.id }}">{{ molino.nombre_completo }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6 form-group">
+          <label class="form-label" for="equipamiento_id">Equipo de preparación</label>
+          <select id="equipamiento_id" name="equipamiento_id" class="form-select">
+            <option value="">Sin especificar</option>
+            {% for equipo in equipos %}
+              <option value="{{ equipo.id }}">{{ equipo.nombre }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="d-flex gap-3 mt-5">
+        <button type="submit" class="btn btn-primary">Publicar receta</button>
+        <a href="{{ url_for('recipes.feed') }}" class="btn btn-outline-primary">Cancelar</a>
+      </div>
+
+    </form>
+  </div>
+</main>
+{% endblock %}

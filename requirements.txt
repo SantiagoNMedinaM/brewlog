@@ -1,0 +1,7 @@
+# ===== Dependencias del backend BrewLog (Flask) =====
+# Instalar con:  pip install -r requirements.txt
+
+Flask==3.0.3              # Framework web principal
+Flask-SQLAlchemy==3.1.1  # ORM: trabajar con la base de datos como objetos Python
+Flask-Login==0.6.3       # Manejo de sesiones de usuario (login/logout)
+Werkzeug==3.0.3          # Utilidades (incluye el hash seguro de contraseñas)

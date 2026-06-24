@@ -14,22 +14,29 @@ cronómetro.
 
 | Módulo | Descripción |
 |--------|-------------|
-| **Feed de recetas** | Repositorio social de recetas con metadatos técnicos normalizados (dosis, ratio, temperatura, tiempo, método, molienda). Grid responsive con filtros por método de extracción. |
-| **Detalle de receta** | Vista editorial con imagen hero, parámetros técnicos destacados y preparación paso a paso. |
-| **Conversor de molienda** | Convierte el punto de molienda entre marcas de molinos usando el tamaño de partícula en micrones como referencia común. Recálculo en tiempo real. |
-| **Calculadora de ratio + cronómetro** | Cálculo bidireccional de la proporción café/agua y cronómetro de extracción con tiempo objetivo por método. |
-| **Bitácora de catas** | Registro personal de los granos probados, con puntaje estilo SCA (1–100) y notas sensoriales (aroma, sabor, textura, retrogusto). |
-| **Autenticación** | Pantalla de login/registro con tabs, validación inline y barra de fortaleza de contraseña. |
+| **Autenticación real** | Registro y login con contraseñas hasheadas y sesiones de usuario (Flask-Login). |
+| **Feed de recetas** | Repositorio de recetas con metadatos técnicos (dosis, ratio, temperatura, tiempo, método, molienda). Filtros por método. Las recetas se guardan en la base de datos. |
+| **Detalle de receta** | Vista editorial con imagen, parámetros técnicos y descripción. |
+| **Conversor de molienda** | Convierte el punto de molienda entre marcas usando los micrones como referencia común (lógica en JavaScript). |
+| **Calculadora de ratio + cronómetro** | Cálculo bidireccional de la proporción café/agua y cronómetro de extracción (JavaScript). |
+| **Bitácora de catas** | Registro personal y privado de los granos probados, con puntaje (1–100) y notas sensoriales. Cada usuario ve solo sus catas. |
 
 ---
 
 ## 🛠️ Stack
 
-- **HTML5** semántico
-- **CSS3** con sistema de _design tokens_ (custom properties) + **Bootstrap 5** como base de grilla
-- **JavaScript** vanilla (sin frameworks ni build step)
-- Tipografías: **Playfair Display** (display) + **Inter** (cuerpo)
-- **Modo claro / oscuro** persistente con `localStorage`
+**Backend**
+- **Python 3** + **Flask** (framework web)
+- **SQLite** + **SQLAlchemy** (base de datos vía ORM)
+- **Flask-Login** (sesiones de usuario)
+- **Werkzeug** (hash seguro de contraseñas)
+- **Jinja2** (motor de plantillas)
+
+**Frontend**
+- **HTML5** semántico + **Bootstrap 5** (grilla)
+- **CSS3** con sistema de _design tokens_ (custom properties) + modo claro/oscuro
+- **JavaScript** vanilla (herramientas interactivas)
+- Tipografías: **Playfair Display** + **Inter**
 
 ---
 
@@ -37,49 +44,60 @@ cronómetro.
 
 ```
 brewlog/
-├── assets/
-│   ├── css/
-│   │   ├── tokens.css        # Variables de diseño (color, tipografía, espaciado, dark mode)
-│   │   ├── main.css          # Estilos base globales + overrides de Bootstrap
-│   │   └── pages/            # Estilos por sección (auth, recipes, tools, journal)
-│   └── js/
-│       ├── auth.js           # Validación, tabs y toggle de contraseña
-│       ├── grind-converter.js
-│       └── ratio-calculator.js
-├── views/
-│   ├── auth/login.html       # Login + registro
-│   ├── recipes/              # feed.html, detail.html
-│   ├── tools/                # grind-converter.html, ratio-calculator.html
-│   ├── journal/              # index.html, create.html
-│   └── profile/
-└── .design/                  # Documentación de diseño (brief, IA, tokens, tareas)
+├── run.py                  # Punto de entrada: arranca el servidor
+├── config.py               # Configuración (base de datos, clave secreta)
+├── requirements.txt        # Dependencias de Python
+│
+├── app/                    # Paquete principal de la aplicación
+│   ├── __init__.py         # App factory: arma la app y registra todo
+│   ├── extensions.py       # Instancias de db y login_manager
+│   ├── models.py           # Modelos/tablas (Usuario, Receta, Molino, etc.)
+│   ├── seed.py             # Carga de datos iniciales
+│   ├── routes/             # Lógica de cada sección (blueprints)
+│   │   ├── auth.py         # Registro, login, logout
+│   │   ├── recipes.py      # Feed, detalle, crear receta
+│   │   ├── journal.py      # Bitácora de catas
+│   │   └── tools.py        # Conversor y calculadora
+│   ├── templates/          # Plantillas Jinja2 (heredan de base.html)
+│   └── static/             # CSS y JavaScript
+│
+└── .design/                # Documentación de diseño (brief, IA, tareas)
 ```
 
 ---
 
 ## 🚀 Cómo ejecutarlo
 
-Al ser HTML/CSS/JS estático, no requiere instalación. Cualquiera de estas opciones:
+**Requisito:** Python 3 instalado.
 
-**Opción 1 — Servidor con Python**
 ```bash
-python -m http.server 8080
+# 1. Crear el entorno virtual e instalar dependencias (solo la primera vez)
+python -m venv venv
+venv\Scripts\activate           # En Windows
+pip install -r requirements.txt
+
+# 2. Inicializar la base de datos (solo la primera vez)
+flask --app app init-db
+
+# 3. Levantar la aplicación
+python run.py
 ```
-Luego abrir `http://localhost:8080/views/auth/login.html`
 
-**Opción 2 — Live Server (VS Code)**
-Abrir `views/auth/login.html` y hacer clic en **Go Live**.
+Luego abrir **http://localhost:5000** en el navegador.
 
-**Opción 3 — Directo**
-Abrir los archivos `.html` con doble clic en el navegador.
+**Cuenta de prueba:** `demo@brewlog.com` / `demo1234`
+(o registrá tu propia cuenta desde la pantalla de inicio).
+
+> Para reiniciar la base de datos: borrar `brewlog.db` y volver a ejecutar
+> `flask --app app init-db`.
 
 ---
 
 ## 📐 Modelo de datos
 
-Entidades principales: `Usuario`, `Receta`, `Molino`, `Equipamiento`,
-`Bitacora_Cata` y `Conversion_Molienda`. El diseño completo del modelo
-entidad-relación está documentado en la entrega de la Primera Etapa.
+Entidades principales implementadas como modelos SQLAlchemy en
+[`app/models.py`](app/models.py): `Usuario`, `Receta`, `Molino`,
+`Equipamiento` y `BitacoraCata`, con sus claves primarias y foráneas.
 
 ---
 

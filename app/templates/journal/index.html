@@ -1,0 +1,76 @@
+{#
+  journal/index.html — Lista de catas del usuario.
+
+  Recibe 'catas' (las del usuario logueado) y 'promedio'. Si no hay ninguna,
+  mostramos el estado vacío.
+#}
+{% extends "base.html" %}
+
+{% block title %}BrewLog — Mi Bitácora{% endblock %}
+{% block body_class %}journal-page{% endblock %}
+
+{% block styles %}
+  <link href="{{ url_for('static', filename='css/pages/journal.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<main class="container px-4">
+
+  <header class="journal-header">
+    <div>
+      <h1 class="journal-header__title">Mi Bitácora de Catas</h1>
+      <p class="journal-header__subtitle">
+        {{ catas|length }} grano{{ 's' if catas|length != 1 }} registrado{{ 's' if catas|length != 1 }}
+        {% if catas %}· puntaje promedio {{ promedio }}{% endif %}
+      </p>
+    </div>
+    <a href="{{ url_for('journal.create') }}" class="btn-new-recipe">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Nueva cata
+    </a>
+  </header>
+
+  {% if catas %}
+  <div class="tasting-list">
+    {% for cata in catas %}
+      <a href="#" class="tasting-entry">
+        <div class="tasting-entry__score">
+          <span class="tasting-entry__score-num">{{ cata.puntaje }}</span>
+          <span class="tasting-entry__score-label">puntos</span>
+        </div>
+        <div class="tasting-entry__body">
+          <h2 class="tasting-entry__grano">{{ cata.nombre_grano }}</h2>
+          <p class="tasting-entry__origen">
+            {% if cata.tostador %}Tostador: {{ cata.tostador }}{% endif %}
+            {% if cata.tostador and cata.origen %} · {% endif %}
+            {% if cata.origen %}Origen: {{ cata.origen }}{% endif %}
+          </p>
+          {# Mostramos como chips las notas sensoriales que existan #}
+          <div class="tasting-notes">
+            {% for nota in [cata.notas_aroma, cata.notas_sabor, cata.notas_textura, cata.retrogusto] %}
+              {% if nota %}<span class="tasting-note-chip">{{ nota }}</span>{% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="tasting-entry__date">{{ cata.fecha_cata.strftime('%d/%m/%Y') }}</div>
+      </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="journal-empty">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9h13v7a4 4 0 01-4 4H7a4 4 0 01-4-4V9z"/>
+      <path d="M16 9h2a3 3 0 010 6h-2"/>
+    </svg>
+    <p class="journal-empty__title">Tu bitácora está vacía</p>
+    <p>Registrá tu primera cata para empezar a llevar el historial de los granos que probás.</p>
+    <a href="{{ url_for('journal.create') }}" class="btn btn-primary mt-3">Registrar mi primera cata</a>
+  </div>
+  {% endif %}
+
+</main>
+{% endblock %}
